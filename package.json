@@ -1,8 +1,7 @@
 {
-  "name": "skylor.min-server",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
+  "name": "egg-react",
+  "version": "0.0.1",
+  "description": "egg-react application",
   "dependencies": {
     "egg": "^2.0.0",
     "egg-mysql": "^3.0.0",
