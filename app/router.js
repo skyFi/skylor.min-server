@@ -17,5 +17,5 @@ module.exports = app => {
 
   // 前端路由
   router.post('/login', 'user.login');
-  router.get('*', 'home.index');
+  router.get('*', require('../frontend/index'));
 };

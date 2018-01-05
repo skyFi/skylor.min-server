@@ -4,10 +4,16 @@ const path = require('path');
 const onerror = require('../common/onerror');
 
 module.exports = appInfo => {
+  console.log(appInfo);
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1514368681876_840';
+
+  exports.logger = {
+    consoleLevel: 'DEBUG',
+    dir: path.join(appInfo.baseDir, 'logs'),
+  };
 
   // add your config here
   config.middleware = [ 'gzip', 'notfoundHandler', 'errorHandler', 'access' ];
@@ -46,7 +52,7 @@ module.exports = appInfo => {
 
   config.static = {
     prefix: '/',
-    dir: path.join(appInfo.baseDir, 'app/public'),
+    dir: path.join(appInfo.baseDir, 'public'),
     dynamic: true,
     preload: true,
     buffer: false,
@@ -55,11 +61,12 @@ module.exports = appInfo => {
 
   config.view = {
     root: [
-      path.join(appInfo.baseDir, 'app/view'),
+      path.join(appInfo.baseDir, 'frontend/view'),
       path.join(appInfo.baseDir, 'public'),
     ].join(','),
     mapping: {
       '.ejs': 'ejs',
+      '.html': 'ejs',
     },
   };
 

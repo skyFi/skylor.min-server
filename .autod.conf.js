@@ -25,8 +25,7 @@ module.exports = {
   exclude: [
     './test/fixtures',
     './dist',
-    './app/web/',
-    './app/public/',
+    './frontend/',
   ],
 };
 

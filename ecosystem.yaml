@@ -1,0 +1,12 @@
+---
+apps:
+  - name: skylor
+    script: server.js
+    exec_interpreter: /Users/yongle/.nvm/versions/node/v8.9.3/bin/node
+    interpreter: /Users/yongle/.nvm/versions/node/v8.9.3/bin/node
+    exec_mode: fork
+    env:
+      NODE_ENV: development
+    env_production:
+      NODE_ENV: production
+    interpreter_args: --optimize_for_size

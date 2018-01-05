@@ -72,4 +72,5 @@ run/
 *.un~
 
 version.json
+manifest.json
 public/

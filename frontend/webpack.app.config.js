@@ -9,7 +9,7 @@ const VersionWebpackPlugin = require('./webpack.version.plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'app/web/index.js'),
+    app: path.resolve(__dirname, 'src/index.js'),
   },
   watch: !process.env.EGG_SERVER_ENV || process.env.EGG_SERVER_ENV === 'develop' || process.env.EGG_SERVER_ENV === 'dev' || process.env.EGG_SERVER_ENV === 'development',
   watchOptions: {
@@ -18,7 +18,7 @@ module.exports = {
     ignored: /(node_modules|bower_components|public)/,
   },
   output: {
-    path: path.resolve(__dirname, 'app/public'),
+    path: path.resolve(__dirname, 'public'),
     filename: '[name].[version].js',
     library: '[name]',
   },
@@ -49,7 +49,7 @@ module.exports = {
     }),
     new HappyPack({
       id: 'js',
-      loaders: [ 'babel-loader' ],
+      loaders: ['babel-loader'],
     }),
     new UglifyJsPlugin({
       cache: true,

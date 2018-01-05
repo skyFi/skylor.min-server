@@ -11,7 +11,7 @@ const webpackLibConfig = require('./webpack.lib.config');
 
 // 清除打包目录
 gulp.task('clean', () => {
-  return del('app/public/**/*');
+  return del('public/**/*');
 });
 
 // 三方库打包
@@ -42,7 +42,7 @@ gulp.task('watch', () => {
       port: 8888,
     },
   }, () => {
-    gulp.watch([ 'app/web/**/*', 'app/view/**/*' ], event => {
+    gulp.watch(['app/web/**/*', 'app/view/**/*'], event => {
       console.log(`[Watch ${color.cyan(event.type)}] ${color.magenta(event.path)}`);
       browserSync.reload();
     });
@@ -63,4 +63,4 @@ function webpackCallback(cb = () => {}) {
   };
 }
 
-gulp.task('dev', gulpSequence('webpack:lib', 'webpack:app', 'watch'));
+gulp.task('dev', gulpSequence('clean', 'webpack:lib', 'webpack:app', 'watch'));

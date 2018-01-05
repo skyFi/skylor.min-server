@@ -12,7 +12,7 @@ function VersionWebpackPlugin(opts = {}) {
 
 VersionWebpackPlugin.prototype.apply = function(compiler) {
   const opts = this.opts;
-  compiler.plugin('done', function() {
+  compiler.plugin('done', () => {
     const jsPath = compiler.options.output.path;
     const jsVersionFileName = compiler.options.output.filename;
     const entry = compiler.options.entry;

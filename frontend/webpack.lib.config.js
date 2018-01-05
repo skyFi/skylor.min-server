@@ -4,16 +4,18 @@ const path = require('path');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const appVersion = require('./package').version;
+const appVersion = require('../package').version;
 
 module.exports = {
   entry: {
     lib: [
       'react',
+      'react-router',
+      'react-dom',
     ],
   },
   output: {
-    path: path.resolve(__dirname, 'app/public'),
+    path: path.resolve(__dirname, 'public'),
     filename: `[name].${appVersion}.js`,
     library: '[name]',
   },
@@ -39,7 +41,7 @@ module.exports = {
     }),
     new HappyPack({
       id: 'js',
-      loaders: [ 'babel-loader' ],
+      loaders: ['babel-loader'],
     }),
     new UglifyJsPlugin({
       cache: true,
