@@ -4,14 +4,21 @@ const path = require('path');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const appVersion = require('../package').version;
+const appVersion = require('../../package').version;
 
 module.exports = {
   entry: {
     lib: [
       'react',
-      'react-router',
+      'redux',
       'react-dom',
+      'react-redux',
+      'redux-thunk',
+      'react-router',
+      'react-helmet',
+      'react-web-helper',
+      'react-router-dom',
+      'react-router-config',
     ],
   },
   output: {

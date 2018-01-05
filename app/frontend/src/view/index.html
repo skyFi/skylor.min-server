@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" <%- helmet.htmlAttributes.toString() %>>
+<head>
+  <meta charset="UTF-8">
+  <%- helmet.title.toString() %>
+  <%- helmet.meta.toString() %>
+  <%- helmet.link.toString() %>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="renderer" content="webkit" />
+  <meta charset="utf-8" />
+
+  <meta http-equiv="Content-Security-Policy" content="<%=  %>">
+  <% for (var i = 0; i < dns.length; i++) { %>
+  <link rel="dns-prefetch" href="//<%= dns[i] %>" />
+  <% } %>
+
+  <link rel="stylesheet" type="text/css" href="<%= cdn %>/app.<%= hash %>.css<%= bundlePostfix %>">
+
+</head>
+<body <%- helmet.bodyAttributes.toString() %>>
+<div id="root"><%- html %></div>
+
+<script>
+  window.__INITIAL_STATE__ = JSON.parse(`<%- __INITIAL_STATE__ %>`);
+</script>
+<script defer type="text/javascript" src="<%= cdn %>/lib.<%= appVersion %>.js"></script>
+<script defer type="text/javascript" src="<%= cdn %>/app.<%= hash %>.js<%= bundlePostfix %>"></script>
+
+<script defer async type="text/javascript" src="<%= cdn %>/sdk.js"></script>
+
+</body>
+</html>

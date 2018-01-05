@@ -5,13 +5,61 @@ const gulp = require('gulp');
 const webpack = require('webpack');
 const gulpSequence = require('gulp-sequence');
 const del = require('del');
+const merge = require('merge-stream');
+const changed = require('gulp-changed');
+const uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
+const file = require('gulp-file');
+const rename = require('gulp-rename');
 const browserSync = require('browser-sync').create();
+const iconPlugin = require('./icon-plugin');
+const config = require('./src/core/common/config');
 const webpackAppConfig = require('./webpack.app.config');
 const webpackLibConfig = require('./webpack.lib.config');
 
 // 清除打包目录
 gulp.task('clean', () => {
   return del('public/**/*');
+});
+
+// 复制文件
+gulp.task('copy', () => {
+  return merge(
+    // 复制图片
+    gulp.src('src/core/asset/img/**/*')
+      .pipe(changed('public/images'))
+      .pipe(gulp.dest('public/images')),
+
+    // 复制图标
+    gulp.src('src/core/asset/img/favicon.ico')
+      .pipe(changed('public'))
+      .pipe(gulp.dest('public')),
+
+    // 复制第三方包
+    gulp.src('src/core/vendor/**/*')
+      .pipe(changed('public'))
+      .pipe(gulp.dest('public')),
+
+    // 压缩单个JS文件
+    gulp.src('src/core/vendor/**/*.js')
+      .pipe(babel())
+      .pipe(uglify())
+      .pipe(changed('public'))
+      .pipe(gulp.dest('public')),
+
+    // 写入less配置
+    gulp.src('src/core/page/style/common/config.less')
+      .pipe(file('config.less', `@cdn: '${config.cdn || ''}';`))
+      .pipe(gulp.dest('src/core/page/style/common')),
+
+    // 生成SVG
+    gulp.src('src/core/asset/svg/**/*.svg')
+      .pipe(iconPlugin())
+      .pipe(rename((path) => {
+        path.extname = '.js';
+      }))
+      .pipe(gulp.dest('src/core/page/icon'))
+  );
 });
 
 // 三方库打包
@@ -42,7 +90,7 @@ gulp.task('watch', () => {
       port: 8888,
     },
   }, () => {
-    gulp.watch(['app/web/**/*', 'app/view/**/*'], event => {
+    gulp.watch(['app/frontend/core/**/*', 'app/frontend/page/**/*', 'app/frontend/view/**/*'], event => {
       console.log(`[Watch ${color.cyan(event.type)}] ${color.magenta(event.path)}`);
       browserSync.reload();
     });
@@ -63,4 +111,4 @@ function webpackCallback(cb = () => {}) {
   };
 }
 
-gulp.task('dev', gulpSequence('clean', 'webpack:lib', 'webpack:app', 'watch'));
+gulp.task('dev', gulpSequence('clean', 'copy', 'webpack:lib', 'webpack:app', 'watch'));

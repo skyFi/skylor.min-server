@@ -5,11 +5,12 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const color = require('cli-color');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const VersionWebpackPlugin = require('./webpack.version.plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src/index.js'),
+    app: path.resolve(__dirname, 'src/page/index.js'),
   },
   watch: !process.env.EGG_SERVER_ENV || process.env.EGG_SERVER_ENV === 'develop' || process.env.EGG_SERVER_ENV === 'dev' || process.env.EGG_SERVER_ENV === 'development',
   watchOptions: {
@@ -19,8 +20,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: '[name].[version].js',
-    library: '[name]',
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].[chunkhash:6].chunk.js',
   },
   devtool: 'inline-source-map',
   module: {
@@ -33,18 +34,62 @@ module.exports = {
           options: {
             id: 'js',
           },
-        }] },
+        }]
+      }, {
+        test: /\.less$/,
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'raw-loader',
+              options: {
+                minimize: true,
+              }
+            },
+            'postcss-loader',
+            'less-loader',
+          ],
+          fallback: 'style-loader',
+        }),
+      }, {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'raw-loader',
+              options: {
+                minimize: true,
+              }
+            },
+            {
+              loader: 'postcss-loader',
+            },
+          ],
+          fallback: 'style-loader',
+        })
+      }, {
+        test: /\.(jpg|png)$/,
+        use: ['url-loader'],
+      }, {
+        test: /\.yml$/,
+        use: ['json-loader', 'yaml-loader']
+      }, {
+        test: /\.svg/,
+        use: ['svg-loader']
+      }
     ],
+  },
+  node: {
+    fs: 'empty'
   },
   plugins: [
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest: require('./manifest.json'),
     }),
+    new ExtractTextPlugin('app.[hash].css'),
     new VersionWebpackPlugin({
-      cb: version => {
-        process.env.APP_VERSION = version;
-        console.log(`${color.cyan('当前编译版本号为：')}${color.magenta(process.env.APP_VERSION)}`);
+      cb: hash => {
+        console.log(`${color.cyan('当前编译hash为：')}${color.magenta(hash)}`);
       },
     }),
     new HappyPack({

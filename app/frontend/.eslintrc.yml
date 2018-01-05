@@ -3,6 +3,11 @@ env:
   node: true
   mocha: true
 extends: 'eslint:recommended'
+globals:
+  $store: false
+  states: false
+  window: false
+  document: false
 parserOptions:
   sourceType: module
   ecmaVersion: 8

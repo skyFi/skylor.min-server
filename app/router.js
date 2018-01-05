@@ -14,8 +14,8 @@ module.exports = app => {
 
   // 接口路由
   router.get('/api/userinfo/:id', needLogin, 'user.userinfo');
-
-  // 前端路由
   router.post('/login', 'user.login');
-  router.get('*', require('../frontend/index'));
+
+  // 页面路由
+  router.get('*', require('./frontend/index'));
 };

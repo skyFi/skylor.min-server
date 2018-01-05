@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = app => {
-  console.log('use', app.view.use);
   app.passport.verify(async (ctx, user) => {
     const profile = user.profile;
     const existsUser = await ctx.service.user.findOrCreateOrUpdate(Object.assign({}, user, profile, profile._json));
